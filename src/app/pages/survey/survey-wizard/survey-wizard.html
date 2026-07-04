@@ -1,0 +1,90 @@
+<div class="wizard-container">
+  <mat-card class="wizard-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1>Nueva Encuesta de Línea Base</h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <!-- Barra de progreso -->
+      <mat-progress-bar mode="determinate" [value]="progressValue" color="primary"></mat-progress-bar>
+      <div class="steps-indicator">
+        <span>Paso {{ currentStep + 1 }} de {{ totalSteps }}</span>
+      </div>
+
+      <mat-horizontal-stepper #stepper (selectionChange)="onStepChange($event)" linear>
+        <!-- Paso 1: Comunidad -->
+        <mat-step [stepControl]="communityForm">
+          <ng-template matStepLabel>Comunidad</ng-template>
+          <app-community-step
+            [formGroup]="communityForm"
+            (formReady)="registerCommunityForm($event)"
+          ></app-community-step>
+          <div class="step-actions">
+            <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+          </div>
+        </mat-step>
+
+        <!-- Paso 2: Familia -->
+        <mat-step [stepControl]="familyForm">
+          <ng-template matStepLabel>Familia</ng-template>
+          <app-family-step
+            [formGroup]="familyForm"
+            (formReady)="registerFamilyForm($event)"
+          ></app-family-step>
+          <div class="step-actions">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+          </div>
+        </mat-step>
+
+        <!-- Paso 3: Agropecuario (Cultivos) -->
+        <mat-step [stepControl]="agroForm">
+          <ng-template matStepLabel>Agropecuario</ng-template>
+          <app-agro-step
+            [formGroup]="agroForm"
+            (formReady)="registerAgroForm($event)"
+          ></app-agro-step>
+          <div class="step-actions">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+          </div>
+        </mat-step>
+
+        <!-- Paso 4: Pecuario (Animales) -->
+        <mat-step [stepControl]="livestockForm">
+          <ng-template matStepLabel>Pecuario</ng-template>
+          <app-livestock-step
+            [formGroup]="livestockForm"
+            (formReady)="registerLivestockForm($event)"
+          ></app-livestock-step>
+          <div class="step-actions">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-raised-button color="primary" matStepperNext>Siguiente</button>
+          </div>
+        </mat-step>
+
+        <!-- Paso 5: Socioeconómico -->
+        <mat-step [stepControl]="socioeconomicForm">
+          <ng-template matStepLabel>Socioeconómico</ng-template>
+          <app-socioeconomic-step
+            [formGroup]="socioeconomicForm"
+            (formReady)="registerSocioeconomicForm($event)"
+          ></app-socioeconomic-step>
+          <div class="step-actions">
+            <button mat-button matStepperPrevious>Atrás</button>
+            <button mat-raised-button color="accent" (click)="submitSurvey()" [disabled]="isSaving">
+              {{ isSaving ? 'Enviando...' : 'Completar Encuesta' }}
+            </button>
+          </div>
+        </mat-step>
+      </mat-horizontal-stepper>
+
+      <div class="global-actions">
+        <button mat-stroked-button color="warn" (click)="saveDraftBackend()" [disabled]="isSaving">
+          Guardar Borrador
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>
+</div>

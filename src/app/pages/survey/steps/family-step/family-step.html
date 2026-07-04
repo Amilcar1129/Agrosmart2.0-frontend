@@ -1,0 +1,24 @@
+<div class="step-container">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre del jefe de familia</mat-label>
+        <input matInput formControlName="jefe_nombre" required>
+        <mat-error>Campo obligatorio</mat-error>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline">
+        <mat-label>Número de miembros</mat-label>
+        <input matInput type="number" formControlName="num_miembros" required min="1">
+        <mat-error>Ingrese un número válido (mínimo 1)</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="check-group">
+      <h4>Accesos básicos</h4>
+      <mat-checkbox formControlName="acceso_agua">Acceso a agua potable</mat-checkbox>
+      <mat-checkbox formControlName="acceso_luz">Acceso a electricidad</mat-checkbox>
+      <mat-checkbox formControlName="acceso_internet">Acceso a internet</mat-checkbox>
+    </div>
+  </form>
+</div>

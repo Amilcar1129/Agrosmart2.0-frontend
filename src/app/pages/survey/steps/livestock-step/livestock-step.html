@@ -1,0 +1,49 @@
+<div class="step-container">
+  <form [formGroup]="form">
+    <div formArrayName="animales">
+      <div *ngFor="let animal of animales.controls; let i = index" [formGroupName]="i" class="animal-item">
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de animal</mat-label>
+          <mat-select formControlName="tipo" required>
+            <mat-option value="Bovino">Bovino</mat-option>
+            <mat-option value="Ave">Ave</mat-option>
+            <mat-option value="Cerdo">Cerdo</mat-option>
+            <mat-option value="Ovino">Ovino</mat-option>
+            <mat-option value="Caprino">Caprino</mat-option>
+            <mat-option value="Equino">Equino</mat-option>
+            <mat-option value="Otro">Otro</mat-option>
+          </mat-select>
+          <mat-error>Seleccione un tipo</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Cantidad</mat-label>
+          <input matInput type="number" formControlName="cantidad" required min="1">
+          <mat-error>Ingrese una cantidad válida</mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Sistema de producción</mat-label>
+          <mat-select formControlName="sistema_produccion">
+            <mat-option value="Pastoreo">Pastoreo</mat-option>
+            <mat-option value="Estabulado">Estabulado</mat-option>
+            <mat-option value="Mixto">Mixto</mat-option>
+            <mat-option value="Familiar">Familiar</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-checkbox formControlName="vacunado">Vacunado</mat-checkbox>
+
+        <button mat-icon-button color="warn" type="button" (click)="removeAnimal(i)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button mat-stroked-button type="button" (click)="addAnimal()">
+        <mat-icon>add</mat-icon> Agregar animal
+      </button>
+    </div>
+  </form>
+</div>

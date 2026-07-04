@@ -1,0 +1,46 @@
+<div class="step-container">
+  <form [formGroup]="form">
+    <div class="form-row">
+      <mat-form-field appearance="outline">
+        <mat-label>Nombre de la comunidad</mat-label>
+        <input matInput formControlName="nombre" required>
+        <mat-error>Campo obligatorio</mat-error>
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Parroquia</mat-label>
+        <input matInput formControlName="parroquia">
+      </mat-form-field>
+      <mat-form-field appearance="outline">
+        <mat-label>Cantón</mat-label>
+        <mat-select formControlName="canton" required>
+          <mat-option value="Bolívar">Bolívar</mat-option>
+          <mat-option value="Chone">Chone</mat-option>
+          <mat-option value="Junín">Junín</mat-option>
+          <mat-option value="San Vicente">San Vicente</mat-option>
+          <mat-option value="Sucre">Sucre</mat-option>
+          <mat-option value="Tosagua">Tosagua</mat-option>
+        </mat-select>
+        <mat-error>Seleccione un cantón</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="map-section">
+      <h3>Ubicación georreferenciada <span class="required">*</span></h3>
+      <app-map
+        [lat]="form.get('lat')?.value"
+        [lng]="form.get('lng')?.value"
+        (locationSelected)="onLocationSelected($event)"
+      ></app-map>
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Referencia de ubicación (texto, si no hay GPS)</mat-label>
+        <textarea matInput rows="2" formControlName="referencia_ubicacion"></textarea>
+      </mat-form-field>
+    </div>
+
+    <div class="photo-section">
+      <h3>Foto de evidencia <span class="required">*</span></h3>
+      <app-photo-capture (photoSelected)="onPhotoSelected($event)"></app-photo-capture>
+      <div class="photo-note">* La foto se comprimirá a 90KB para facilitar el envío en zonas rurales</div>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,42 @@
+<div class="step-container">
+  <form [formGroup]="form">
+    <div class="cultivos-section">
+      <h3>Lista de Cultivos</h3>
+      <div formArrayName="cultivos">
+        <div *ngFor="let cultivo of cultivos.controls; let i = index" 
+             [formGroupName]="i" 
+             class="cultivo-item">
+          
+          <mat-form-field appearance="outline" class="cultivo-field">
+            <mat-label>Nombre del cultivo</mat-label>
+            <input matInput formControlName="nombre_cultivo" required>
+            <mat-error>Campo obligatorio</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="cultivo-field">
+            <mat-label>Área (hectáreas)</mat-label>
+            <input matInput type="number" formControlName="area_ha" required min="0.01" step="0.01">
+            <mat-error>Ingrese un valor mayor a 0</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="cultivo-field">
+            <mat-label>Rendimiento estimado (kg/ha)</mat-label>
+            <input matInput type="number" formControlName="rendimiento_estimado" min="0">
+          </mat-form-field>
+
+          <button mat-icon-button 
+                  color="warn" 
+                  type="button" 
+                  (click)="removeCultivo(i)"
+                  [disabled]="cultivos.length <= 1">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </div>
+      </div>
+
+      <button mat-stroked-button type="button" (click)="addCultivo()" color="primary">
+        <mat-icon>add</mat-icon> Agregar cultivo
+      </button>
+    </div>
+  </form>
+</div>

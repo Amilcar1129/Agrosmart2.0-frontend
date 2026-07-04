@@ -1,0 +1,34 @@
+.step-container {
+  padding: 1rem;
+}
+
+.animal-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+
+  mat-form-field {
+    flex: 1 1 180px;
+    min-width: 150px;
+  }
+
+  mat-checkbox {
+    margin-right: 1rem;
+  }
+
+  button {
+    align-self: center;
+  }
+}
+
+.actions {
+  margin-top: 1rem;
+  display: flex;
+  justify-content: flex-start;
+}

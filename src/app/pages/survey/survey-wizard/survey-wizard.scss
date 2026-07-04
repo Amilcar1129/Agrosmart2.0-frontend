@@ -1,0 +1,24 @@
+.wizard-container {
+  padding: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+.wizard-card {
+  padding: 1rem;
+}
+.steps-indicator {
+  text-align: center;
+  margin: 1rem 0;
+  font-weight: 500;
+}
+.step-actions {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+}
+.global-actions {
+  margin-top: 2rem;
+  display: flex;
+  justify-content: center;
+}

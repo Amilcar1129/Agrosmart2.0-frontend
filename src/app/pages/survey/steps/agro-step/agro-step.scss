@@ -1,0 +1,32 @@
+.step-container {
+  padding: 1rem;
+}
+
+.cultivos-section {
+  h3 {
+    margin-top: 0;
+    font-weight: 500;
+    color: #333;
+  }
+}
+
+.cultivo-item {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  margin-bottom: 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  border-left: 4px solid #2e7d32;
+}
+
+.cultivo-field {
+  flex: 1;
+  min-width: 180px;
+}
+
+button[mat-stroked-button] {
+  margin-top: 0.5rem;
+}

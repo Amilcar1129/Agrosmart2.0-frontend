@@ -1,0 +1,22 @@
+.step-container {
+  padding: 1rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.check-group {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+
+  h4 {
+    margin: 0 0 0.5rem 0;
+    font-weight: 500;
+    color: #333;
+  }
+}
