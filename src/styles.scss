@@ -1,3 +1,5 @@
+@import "leaflet/dist/leaflet.css";
+
 .success-snackbar {
   background-color: #2e7d32;
   color: white;
@@ -9,4 +11,8 @@
 .warning-snackbar {
   background-color: #ff9800;
   color: black;
+}
+.map-container {
+  height: 300px !important;
+  width: 100% !important;
 }

@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, inject } from '@angular/core';
+import { Component, Input, Output, EventEmitter, OnInit, OnChanges, SimpleChanges, inject, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -26,6 +26,13 @@ import { MapComponent } from '../../../../shared/components/map/map/map';
   styleUrls: ['./community-step.scss'],
 })
 export class CommunityStepComponent implements OnInit, OnChanges {
+  @ViewChild(MapComponent) mapComponent!: MapComponent;
+
+invalidateMap(): void {
+  if (this.mapComponent) {
+    this.mapComponent.invalidateSize();
+  }
+}
   @Input() formGroup!: FormGroup;
   @Output() formReady = new EventEmitter<FormGroup>();
   form!: FormGroup;
