@@ -1,1 +1,107 @@
-<p>encuestas-list works!</p>
+<div class="encuestas-container">
+  <!-- Encabezado -->
+  <div class="header">
+    <h1>Historial de Encuestas</h1>
+    <button mat-raised-button color="primary" (click)="nuevaEncuesta()">
+      <mat-icon>add</mat-icon> Nueva Encuesta
+    </button>
+  </div>
+
+  <!-- Filtros -->
+  <div class="filtros">
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Estado</mat-label>
+      <mat-select [(ngModel)]="filtroEstado" (selectionChange)="aplicarFiltros()">
+        <mat-option value="Todos">Todos</mat-option>
+        <mat-option value="borrador">Borrador</mat-option>
+        <mat-option value="completa">Completa</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="filter-field">
+      <mat-label>Cantón</mat-label>
+      <mat-select [(ngModel)]="filtroCanton" (selectionChange)="aplicarFiltros()">
+        <mat-option value="Todos">Todos</mat-option>
+        <mat-option *ngFor="let canton of cantones" [value]="canton">{{ canton }}</mat-option>
+      </mat-select>
+    </mat-form-field>
+
+    <button mat-stroked-button color="warn" (click)="limpiarFiltros()">
+      <mat-icon>clear</mat-icon> Limpiar filtros
+    </button>
+  </div>
+
+  <!-- Tabla -->
+  <div class="table-container">
+    <mat-table [dataSource]="dataSource" matSort>
+      <!-- ID -->
+      <ng-container matColumnDef="id">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>ID</mat-header-cell>
+        <mat-cell *matCellDef="let encuesta">{{ encuesta.id }}</mat-cell>
+      </ng-container>
+
+      <!-- Fecha -->
+      <ng-container matColumnDef="fecha">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Fecha</mat-header-cell>
+        <mat-cell *matCellDef="let encuesta">{{ formatFecha(encuesta.fecha_creacion) }}</mat-cell>
+      </ng-container>
+
+      <!-- Comunidad -->
+      <ng-container matColumnDef="comunidad">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Comunidad</mat-header-cell>
+        <mat-cell *matCellDef="let encuesta">{{ encuesta.comunidad?.nombre || 'Sin nombre' }}</mat-cell>
+      </ng-container>
+
+      <!-- Cantón -->
+      <ng-container matColumnDef="canton">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Cantón</mat-header-cell>
+        <mat-cell *matCellDef="let encuesta">{{ encuesta.comunidad?.canton || 'N/A' }}</mat-cell>
+      </ng-container>
+
+      <!-- Estado -->
+      <ng-container matColumnDef="estado">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>Estado</mat-header-cell>
+        <mat-cell *matCellDef="let encuesta">
+          <mat-chip [color]="getEstadoColor(encuesta.estado)" selected>
+            {{ encuesta.estado | titlecase }}
+          </mat-chip>
+        </mat-cell>
+      </ng-container>
+
+      <!-- Acciones -->
+      <ng-container matColumnDef="acciones">
+        <mat-header-cell *matHeaderCellDef>Acciones</mat-header-cell>
+        <mat-cell *matCellDef="let encuesta">
+          <button mat-icon-button matTooltip="Ver detalle" (click)="verDetalle(encuesta.id)">
+            <mat-icon>visibility</mat-icon>
+          </button>
+          <button mat-icon-button matTooltip="Editar" [disabled]="encuesta.estado === 'completa'" (click)="editarEncuesta(encuesta.id, encuesta.estado)">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" matTooltip="Eliminar" (click)="eliminarEncuesta(encuesta.id)">
+            <mat-icon>delete</mat-icon>
+          </button>
+        </mat-cell>
+      </ng-container>
+
+      <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+      <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+    </mat-table>
+
+    <!-- Sin datos -->
+    <div *ngIf="dataSource.data.length === 0" class="no-data">
+      <mat-icon>inbox</mat-icon>
+      <p>No hay encuestas registradas</p>
+      <button mat-raised-button color="primary" (click)="nuevaEncuesta()">Crear primera encuesta</button>
+    </div>
+
+    <!-- Paginador -->
+    <mat-paginator
+      [length]="totalItems"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPageChange($event)"
+      showFirstLastButtons
+    ></mat-paginator>
+  </div>
+</div>
