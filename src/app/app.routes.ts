@@ -44,7 +44,7 @@ import { RoleGuard } from './guards/role.guard';
 import { Dashboard } from './pages/dashboard/dashboard/dashboard';
 import { SurveyWizardComponent } from './pages/survey/survey-wizard/survey-wizard';
 import { EncuestasListComponents } from './pages/encuestas-list/encuestas-list/encuestas-list';
-
+import { EncuestaDetailComponent } from './pages/encuesta-detail/encuesta-detail/encuesta-detail';
 
 
 export const routes: Routes = [
@@ -60,6 +60,8 @@ export const routes: Routes = [
       { path: 'dashboard', component: Dashboard },
       { path: 'survey/new', component: SurveyWizardComponent },
       { path: 'encuestas', component: EncuestasListComponents},
+      { path: 'survey/:id', component: EncuestaDetailComponent },
+      
       // Redirección por defecto dentro del área protegida
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

@@ -1,1 +1,154 @@
-<p>encuesta-detail works!</p>
+<div class="detail-container" *ngIf="encuesta; else loadingTemplate">
+  <!-- Botón volver -->
+  <div class="header-actions">
+    <button mat-stroked-button (click)="volver()">
+      <mat-icon>arrow_back</mat-icon> Volver al listado
+    </button>
+    <button mat-raised-button color="primary" (click)="editar()" [disabled]="encuesta.estado === 'completa'">
+      <mat-icon>edit</mat-icon> Editar
+    </button>
+  </div>
+
+  <!-- Tarjeta principal -->
+  <mat-card class="detail-card">
+    <mat-card-header>
+      <mat-card-title>
+        <h1>Encuesta #{{ encuesta.id }}</h1>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <mat-chip [color]="getEstadoColor(encuesta.estado)" selected>
+          {{ encuesta.estado | titlecase }}
+        </mat-chip>
+        <span class="fecha">Creada: {{ encuesta.fecha_creacion | date:'medium' }}</span>
+      </mat-card-subtitle>
+    </mat-card-header>
+
+    <mat-card-content>
+      <!-- SECCIÓN: Comunidad -->
+      <section class="detail-section">
+        <h2>Comunidad</h2>
+        <div class="info-grid">
+          <div><strong>Nombre:</strong> {{ encuesta.comunidad?.nombre || 'N/A' }}</div>
+          <div><strong>Parroquia:</strong> {{ encuesta.comunidad?.parroquia || 'N/A' }}</div>
+          <div><strong>Cantón:</strong> {{ encuesta.comunidad?.canton || 'N/A' }}</div>
+          <div><strong>Referencia:</strong> {{ encuesta.comunidad?.referencia_ubicacion || 'N/A' }}</div>
+        </div>
+        <!-- Mapa (si hay coordenadas) -->
+        <div class="map-container" *ngIf="encuesta.comunidad?.lat && encuesta.comunidad?.lng">
+          <app-map
+            [lat]="encuesta.comunidad.lat"
+            [lng]="encuesta.comunidad.lng"
+          ></app-map>
+        </div>
+        <div *ngIf="!encuesta.comunidad?.lat || !encuesta.comunidad?.lng" class="no-map">
+          <mat-icon>location_off</mat-icon>
+          <p>No hay coordenadas registradas para esta comunidad</p>
+        </div>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <!-- SECCIÓN: Familia -->
+      <section class="detail-section">
+        <h2>Familia</h2>
+        <div class="info-grid">
+          <div><strong>Jefe de familia:</strong> {{ encuesta.familia?.jefe_nombre || 'N/A' }}</div>
+          <div><strong>Número de miembros:</strong> {{ encuesta.familia?.num_miembros || 'N/A' }}</div>
+          <div><strong>Acceso a agua:</strong> {{ getAccesoTexto(encuesta.familia?.acceso_agua) }}</div>
+          <div><strong>Acceso a luz:</strong> {{ getAccesoTexto(encuesta.familia?.acceso_luz) }}</div>
+          <div><strong>Acceso a internet:</strong> {{ getAccesoTexto(encuesta.familia?.acceso_internet) }}</div>
+        </div>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <!-- SECCIÓN: Cultivos -->
+      <section class="detail-section" *ngIf="encuesta.cultivos && encuesta.cultivos.length > 0">
+        <h2>Cultivos</h2>
+        <table mat-table [dataSource]="encuesta.cultivos" class="mat-elevation-z0">
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef>Nombre</th>
+            <td mat-cell *matCellDef="let cultivo">{{ cultivo.nombre_cultivo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="area">
+            <th mat-header-cell *matHeaderCellDef>Área (ha)</th>
+            <td mat-cell *matCellDef="let cultivo">{{ cultivo.area_ha }}</td>
+          </ng-container>
+          <ng-container matColumnDef="rendimiento">
+            <th mat-header-cell *matHeaderCellDef>Rendimiento (kg/ha)</th>
+            <td mat-cell *matCellDef="let cultivo">{{ cultivo.rendimiento_estimado || 'N/A' }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="cultivosColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: cultivosColumns;"></tr>
+        </table>
+        <div *ngIf="encuesta.cultivos.length === 0" class="no-data">No hay cultivos registrados</div>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <!-- SECCIÓN: Animales -->
+      <section class="detail-section" *ngIf="encuesta.animales && encuesta.animales.length > 0">
+        <h2>Animales</h2>
+        <table mat-table [dataSource]="encuesta.animales" class="mat-elevation-z0">
+          <ng-container matColumnDef="tipo">
+            <th mat-header-cell *matHeaderCellDef>Tipo</th>
+            <td mat-cell *matCellDef="let animal">{{ animal.tipo }}</td>
+          </ng-container>
+          <ng-container matColumnDef="cantidad">
+            <th mat-header-cell *matHeaderCellDef>Cantidad</th>
+            <td mat-cell *matCellDef="let animal">{{ animal.cantidad }}</td>
+          </ng-container>
+          <ng-container matColumnDef="sistema">
+            <th mat-header-cell *matHeaderCellDef>Sistema</th>
+            <td mat-cell *matCellDef="let animal">{{ animal.sistema_produccion || 'N/A' }}</td>
+          </ng-container>
+          <ng-container matColumnDef="vacunado">
+            <th mat-header-cell *matHeaderCellDef>Vacunado</th>
+            <td mat-cell *matCellDef="let animal">{{ getAccesoTexto(animal.vacunado) }}</td>
+          </ng-container>
+          <tr mat-header-row *matHeaderRowDef="animalesColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: animalesColumns;"></tr>
+        </table>
+        <div *ngIf="encuesta.animales.length === 0" class="no-data">No hay animales registrados</div>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <!-- SECCIÓN: Socioeconómico -->
+      <section class="detail-section">
+        <h2>Socioeconómico</h2>
+        <div class="info-grid">
+          <div><strong>Ingreso mensual:</strong> ${{ formatNumber(encuesta.socioeconomico?.ingreso_mensual) }}</div>
+          <div><strong>Fuentes de ingreso:</strong> {{ encuesta.socioeconomico?.fuentes_ingreso || 'N/A' }}</div>
+          <div><strong>Acceso a crédito:</strong> {{ getAccesoTexto(encuesta.socioeconomico?.acceso_credito) }}</div>
+          <div><strong>Asistencia técnica:</strong> {{ getAccesoTexto(encuesta.socioeconomico?.asistencia_tecnica) }}</div>
+        </div>
+      </section>
+
+      <mat-divider></mat-divider>
+
+      <!-- SECCIÓN: Foto de evidencia -->
+      <section class="detail-section photo-section">
+        <h2>Foto de evidencia</h2>
+        <div *ngIf="getFotoUrl()" class="photo-container">
+          <img [src]="getFotoUrl()" alt="Foto de evidencia" class="evidencia-img">
+          <a [href]="getFotoUrl()" target="_blank" mat-button color="primary">
+            <mat-icon>open_in_new</mat-icon> Abrir en nueva pestaña
+          </a>
+        </div>
+        <div *ngIf="!getFotoUrl()" class="no-data">
+          <mat-icon>photo_camera</mat-icon>
+          <p>No hay foto de evidencia</p>
+        </div>
+      </section>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Loading mientras carga -->
+<ng-template #loadingTemplate>
+  <div class="loading-container">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando detalles de la encuesta...</p>
+  </div>
+</ng-template>
