@@ -41,7 +41,7 @@ import { LoginComponent } from './pages/login/login/login';
 import { MainLayoutComponent } from './layout/main-layout/main-layout';
 import { AuthGuard} from './guards/auth.guard';
 import { RoleGuard } from './guards/role.guard';
-import { Dashboard } from './pages/dashboard/dashboard/dashboard';
+import { DashboardComponent } from './pages/dashboard/dashboard/dashboard';
 import { SurveyWizardComponent } from './pages/survey/survey-wizard/survey-wizard';
 import { EncuestasListComponents } from './pages/encuestas-list/encuestas-list/encuestas-list';
 import { EncuestaDetailComponent } from './pages/encuesta-detail/encuesta-detail/encuesta-detail';
@@ -57,7 +57,7 @@ export const routes: Routes = [
     component: MainLayoutComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'dashboard', component: Dashboard },
+      { path: 'dashboard', component: DashboardComponent },
       { path: 'survey/new', component: SurveyWizardComponent },
       { path: 'encuestas', component: EncuestasListComponents},
       { path: 'survey/:id', component: EncuestaDetailComponent },
