@@ -1,1 +1,129 @@
-<p>dashboard works!</p>
+<div class="dashboard-container">
+
+  <!-- Encabezado con filtros -->
+  <div class="dashboard-header">
+    <div>
+      <h1>Panel de Control</h1>
+      <p class="subtitle">Resumen general de las encuestas registradas</p>
+    </div>
+    <mat-button-toggle-group [(ngModel)]="filterPeriod" (change)="aplicarFiltro()" class="filter-group">
+      <mat-button-toggle value="week">Últimos 7 días</mat-button-toggle>
+      <mat-button-toggle value="month">Este mes</mat-button-toggle>
+      <mat-button-toggle value="year">Este año</mat-button-toggle>
+      <mat-button-toggle value="all">Todos</mat-button-toggle>
+    </mat-button-toggle-group>
+  </div>
+
+  <!-- KPIs -->
+  <div class="kpi-grid">
+    <mat-card class="kpi-card kpi-green">
+      <mat-card-content>
+        <div class="kpi-icon"><mat-icon>assignment</mat-icon></div>
+        <div class="kpi-value">{{ totalEncuestas }}</div>
+        <div class="kpi-label">Encuestas totales</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card kpi-blue">
+      <mat-card-content>
+        <div class="kpi-icon"><mat-icon>location_on</mat-icon></div>
+        <div class="kpi-value">{{ totalComunidades }}</div>
+        <div class="kpi-label">Comunidades</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card kpi-orange">
+      <mat-card-content>
+        <div class="kpi-icon"><mat-icon>grass</mat-icon></div>
+        <div class="kpi-value">{{ totalCultivos }}</div>
+        <div class="kpi-label">Total de cultivos</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card kpi-purple">
+      <mat-card-content>
+        <div class="kpi-icon"><mat-icon>pets</mat-icon></div>
+        <div class="kpi-value">{{ totalAnimales }}</div>
+        <div class="kpi-label">Animales registrados</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card kpi-teal">
+      <mat-card-content>
+        <div class="kpi-icon"><mat-icon>square_foot</mat-icon></div>
+        <div class="kpi-value">{{ totalHectareas | number:'1.1-1' }}</div>
+        <div class="kpi-label">Hectáreas cultivadas</div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="kpi-card kpi-red">
+      <mat-card-content>
+        <div class="kpi-icon"><mat-icon>trending_up</mat-icon></div>
+        <div class="kpi-value">{{ tasaCompletitud | number:'1.0-0' }}%</div>
+        <div class="kpi-label">Tasa de completitud</div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Gráficos principales -->
+  <div class="charts-grid">
+    <mat-card class="chart-card">
+      <mat-card-content>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="barChartData" [options]="barChartOptions" [type]="barChartType"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <mat-card-content>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="topCultivosChartData" [options]="topCultivosChartOptions" [type]="topCultivosChartType"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- Gráficos secundarios + Actividad reciente -->
+  <div class="bottom-grid">
+    <mat-card class="chart-card">
+      <mat-card-content>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="animalesChartData" [options]="animalesChartOptions" [type]="animalesChartType"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="chart-card">
+      <mat-card-content>
+        <div class="chart-wrapper">
+          <canvas baseChart [data]="estadoChartData" [options]="estadoChartOptions" [type]="estadoChartType"></canvas>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Actividad reciente -->
+    <mat-card class="activity-card">
+      <mat-card-header>
+        <mat-card-title>Últimas encuestas</mat-card-title>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="activity-list">
+          <div *ngFor="let survey of recentSurveys" class="activity-item">
+            <div class="activity-info">
+              <span class="activity-community">{{ survey.comunidad?.nombre || 'Sin nombre' }}</span>
+              <span class="activity-date">{{ survey.fecha_creacion | date:'dd/MM/yyyy' }}</span>
+            </div>
+            <mat-chip [color]="survey.estado === 'borrador' ? 'warn' : 'primary'" selected>
+              {{ survey.estado }}
+            </mat-chip>
+          </div>
+          <div *ngIf="recentSurveys.length === 0" class="no-activity">
+            <mat-icon>inbox</mat-icon>
+            <p>No hay actividad reciente</p>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
