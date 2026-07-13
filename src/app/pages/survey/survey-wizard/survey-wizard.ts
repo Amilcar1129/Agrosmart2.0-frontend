@@ -119,15 +119,18 @@ export class SurveyWizardComponent implements OnInit, AfterViewInit {
   }
 
   saveDraftLocal(): void {
-    if (this.surveyForm.valid) {
-      const draft = {
-        data: this.surveyForm.value,
-        step: this.currentStep,
-        surveyId: this.surveyId,
-        timestamp: new Date().toISOString()
-      };
-      localStorage.setItem('survey_draft', JSON.stringify(draft));
+    const draft = {
+      data: this.surveyForm.value,
+      step: this.currentStep,
+      surveyId: this.surveyId,
+      timestamp: new Date().toISOString()
+    };
+
+    if (Object.keys(draft.data).length === 0 && !this.surveyId) {
+      return;
     }
+
+    localStorage.setItem('survey_draft', JSON.stringify(draft));
   }
 
   loadDraft(): void {
@@ -169,13 +172,17 @@ export class SurveyWizardComponent implements OnInit, AfterViewInit {
   }
 
   saveDraftBackend(): void {
-    if (this.surveyForm.invalid) {
-      this.notification.showWarning('Complete los campos obligatorios antes de guardar borrador');
+    const foto = this.communityForm.get('fotoFile')?.value as File | null;
+    const surveyData = this.buildSurveyData(true);
+
+    if (!foto) {
+      this.saveDraftLocal();
+      this.notification.showInfo('Borrador guardado localmente. Agrega la foto para enviar al servidor.');
       return;
     }
+
     this.isSaving = true;
-    const surveyData = this.buildSurveyData();
-    this.SurveyService.saveSurvey(surveyData, null).subscribe({
+    this.SurveyService.saveSurvey(surveyData, foto).subscribe({
       next: (res) => {
         this.surveyId = res.id;
         this.isSaving = false;
@@ -216,24 +223,30 @@ export class SurveyWizardComponent implements OnInit, AfterViewInit {
     });
   }
 
-  private buildSurveyData(): any {
+  private buildSurveyData(isDraft = false): any {
     const communityVal = this.communityForm.value;
-    return {
+
+    const baseData: any = {
       id: this.surveyId,
-      estado: 'completa',
+      estado: isDraft ? 'borrador' : 'completa',
       paso_actual: this.currentStep,
-      comunidad: {
+      familia: this.familyForm.value,
+      socioeconomico: this.socioeconomicForm.value,
+      cultivos: this.agroForm.value.cultivos || [],
+      animales: this.livestockForm.value.animales || []
+    };
+
+    if (communityVal && Object.keys(communityVal).length > 0) {
+      baseData.comunidad = {
         nombre: communityVal.nombre,
         parroquia: communityVal.parroquia,
         canton: communityVal.canton,
         lat: communityVal.lat,
         lng: communityVal.lng,
         referencia_ubicacion: communityVal.referencia_ubicacion
-      },
-      familia: this.familyForm.value,
-      socioeconomico: this.socioeconomicForm.value,
-      cultivos: this.agroForm.value.cultivos || [],
-      animales: this.livestockForm.value.animales || []
-    };
+      };
+    }
+
+    return baseData;
   }
 }
