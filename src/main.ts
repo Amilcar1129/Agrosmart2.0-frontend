@@ -5,5 +5,6 @@ import { Chart, registerables } from 'chart.js';
 
 Chart.register(...registerables);
 
+
 bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));
