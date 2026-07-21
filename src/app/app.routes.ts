@@ -45,8 +45,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard/dashboard';
 import { SurveyWizardComponent } from './pages/survey/survey-wizard/survey-wizard';
 import { EncuestasListComponents } from './pages/encuestas-list/encuestas-list/encuestas-list';
 import { EncuestaDetailComponent } from './pages/encuesta-detail/encuesta-detail/encuesta-detail';
-
-
+import { MapViewComponent } from './pages/map-view/map-view/map-view';
 export const routes: Routes = [
   // Ruta pública de login
   { path: 'login', component: LoginComponent },
@@ -61,7 +60,7 @@ export const routes: Routes = [
       { path: 'survey/new', component: SurveyWizardComponent },
       { path: 'encuestas', component: EncuestasListComponents},
       { path: 'survey/:id', component: EncuestaDetailComponent },
-      
+      { path:  'map', component: MapViewComponent},
       // Redirección por defecto dentro del área protegida
       { path: '', redirectTo: 'dashboard', pathMatch: 'full' }
     ]

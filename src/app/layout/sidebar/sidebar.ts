@@ -18,7 +18,7 @@ export class SidebarComponent {
     { path: '/dashboard', icon: 'dashboard', label: 'Dashboard', roles: ['tecnico', 'coordinador', 'admin'] },
     { path: '/survey/new', icon: 'add_circle', label: 'Nueva Encuesta', roles: ['tecnico', 'coordinador', 'admin'] },
     { path: '/encuestas', icon: 'list', label: 'Historial', roles: ['tecnico', 'coordinador', 'admin'] },
-    { path: '/mapa', icon: 'map', label: 'Mapa', roles: ['tecnico', 'coordinador', 'admin'] },
+    { path: '/map', icon: 'map', label: 'Mapa', roles: ['tecnico', 'coordinador', 'admin'] },
     { path: '/reportes', icon: 'bar_chart', label: 'Reportes', roles: ['tecnico', 'coordinador', 'admin'] },
     { path: '/usuarios', icon: 'people', label: 'Usuarios', roles: ['admin'] }
   ];
