@@ -2,11 +2,19 @@ import { Component, Input, Output, EventEmitter, AfterViewInit, ElementRef, View
 import { CommonModule } from '@angular/common';
 import * as L from 'leaflet';
 
-L.Icon.Default.mergeOptions({
-  iconUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon.png',
-  iconRetinaUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-icon-2x.png',
-  shadowUrl: 'https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png'
+//  Configuración de iconos con rutas locales (recomendado para zonas rurales sin internet)
+const defaultIcon = L.icon({
+  iconUrl: 'assets/leaflet/marker-icon.png',
+  iconRetinaUrl: 'assets/leaflet/marker-icon-2x.png',
+  shadowUrl: 'assets/leaflet/marker-shadow.png',
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  shadowSize: [41, 41]
 });
+
+// Asignar como icono por defecto para todos los marcadores
+L.Marker.prototype.options.icon = defaultIcon;
 
 @Component({
   selector: 'app-map',
@@ -40,11 +48,6 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       attributionControl: true
     });
 
-    // Forzar invalidación del tamaño después de que el mapa se haya inicializado
-    setTimeout(() => {
-      this.map?.invalidateSize();
-    }, 300);
-
     // Capa base
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -55,7 +58,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.marker = L.marker([this.lat, this.lng]).addTo(this.map);
     }
 
-    // Evento de clic
+    // Evento de clic para seleccionar ubicación
     this.map.on('click', (e: L.LeafletMouseEvent) => {
       const { lat, lng } = e.latlng;
       if (this.marker) {
@@ -65,7 +68,12 @@ export class MapComponent implements AfterViewInit, OnDestroy {
       this.locationSelected.emit({ lat, lng });
     });
 
-    // Forzar invalidación del tamaño también después de que la capa de tiles se haya cargado
+    // Forzar invalidación del tamaño después de que el DOM esté listo
+    setTimeout(() => {
+      this.map?.invalidateSize();
+    }, 300);
+
+    // Invalidar de nuevo cuando la capa de tiles esté lista
     this.map.whenReady(() => {
       setTimeout(() => {
         this.map?.invalidateSize();
@@ -73,7 +81,7 @@ export class MapComponent implements AfterViewInit, OnDestroy {
     });
   }
 
-  // Método para que el padre pueda invalidar el tamaño del mapa desde fuera
+  // Método para que el padre invalide el mapa desde fuera
   invalidateSize(): void {
     if (this.map) {
       setTimeout(() => {
