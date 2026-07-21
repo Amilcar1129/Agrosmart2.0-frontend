@@ -1,0 +1,56 @@
+.map-view-container {
+  height: 100%;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+.map-wrapper {
+  flex: 1;
+  min-height: 500px;
+  overflow: hidden;
+  border-radius: 12px;
+}
+
+.map-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+
+  h1 {
+    margin: 0;
+    color: #1b5e20;
+    font-weight: 500;
+    font-size: 1.8rem;
+  }
+
+  .total-comunidades {
+    color: #666;
+    font-size: 0.9rem;
+  }
+}
+
+.map-wrapper {
+  flex: 1;
+  min-height: 500px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  border: 1px solid #e0e0e0;
+
+  .map-container {
+    width: 100%;
+    height: 100%;
+    min-height: 500px;
+  }
+}
+
+.map-footer {
+  margin-top: 0.5rem;
+  color: #888;
+  font-size: 0.85rem;
+  text-align: center;
+}

@@ -1,1 +1,17 @@
-<p>map-view works!</p>
+<div class="map-view-container">
+  <div class="map-wrapper">
+    <div #mapContainer class="map-container"></div>
+  </div>
+
+  <!-- Loading overlay -->
+  <div *ngIf="isLoading" class="loading-overlay">
+    <mat-spinner diameter="50"></mat-spinner>
+    <p>Cargando comunidades...</p>
+  </div>
+
+  <!-- Mensaje sin datos -->
+  <div *ngIf="!isLoading && markersCount === 0" class="no-data-message">
+    <mat-icon>location_off</mat-icon>
+    <p>No hay comunidades georreferenciadas</p>
+  </div>
+</div>
