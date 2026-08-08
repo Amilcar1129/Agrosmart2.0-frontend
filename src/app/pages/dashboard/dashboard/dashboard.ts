@@ -189,10 +189,10 @@ export class DashboardComponent implements OnInit {
     encuestas.forEach(e => {
       const cultivos = e.cultivos || [];
       cultivosCount += cultivos.length;
-      hectTotales += cultivos.reduce((sum, c) => sum + (c.area_ha || 0), 0);
+      hectTotales += cultivos.reduce((sum, c) => sum + (Number(c.area_ha) || 0), 0);
 
       const animales = e.animales || [];
-      animTotales += animales.reduce((sum, a) => sum + (a.cantidad || 0), 0);
+      animTotales += animales.reduce((sum, a) => sum + (Number(a.cantidad) || 0), 0);
     });
 
     this.totalHectareas = hectTotales;
@@ -232,8 +232,8 @@ export class DashboardComponent implements OnInit {
     const cultivosMap = new Map<string, number>();
     encuestas.forEach(e => {
       (e.cultivos || []).forEach(c => {
-        cultivosMap.set(c.nombre_cultivo, (cultivosMap.get(c.nombre_cultivo) || 0) + c.area_ha);
-      });
+const area = Number(c.area_ha) || 0;
+cultivosMap.set(c.nombre_cultivo, (cultivosMap.get(c.nombre_cultivo) || 0) + area);      });
     });
     const topCultivos = Array.from(cultivosMap.entries())
       .sort((a, b) => b[1] - a[1])
@@ -252,8 +252,8 @@ export class DashboardComponent implements OnInit {
     const animalesMap = new Map<string, number>();
     encuestas.forEach(e => {
       (e.animales || []).forEach(a => {
-        animalesMap.set(a.tipo, (animalesMap.get(a.tipo) || 0) + a.cantidad);
-      });
+const cantidad = Number(a.cantidad) || 0;
+animalesMap.set(a.tipo, (animalesMap.get(a.tipo) || 0) + cantidad);      });
     });
     const animalData = Array.from(animalesMap.entries());
     const coloresAnimales = ['#4caf50', '#ff9800', '#f44336', '#2196f3', '#9c27b0', '#795548'];
