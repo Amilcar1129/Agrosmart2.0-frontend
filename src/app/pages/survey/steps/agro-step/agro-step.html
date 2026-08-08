@@ -24,6 +24,10 @@
             <input matInput type="number" formControlName="rendimiento_estimado" min="0">
           </mat-form-field>
 
+          <button mat-stroked-button type="button" (click)="openPolygonDrawer(i)" color="primary">
+            <mat-icon>polygon</mat-icon> Dibujar polígono
+          </button>
+
           <button mat-icon-button 
                   color="warn" 
                   type="button" 
